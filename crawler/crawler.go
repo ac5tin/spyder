@@ -64,13 +64,13 @@ func (c *Crawler) Full(url string, r *Results) error {
 		}
 		r.RawHTML = html
 		// --- TITLE ---
-		r.Title = h.DOM.Clone().Find("title").Text()
+		r.Title = h.DOM.Find("title").Text()
 		// --- Summary ---
-		if v, ok := h.DOM.Clone().Find("meta[itemprop=description][content]").Attr("content"); ok {
+		if v, ok := h.DOM.Find("meta[itemprop=description][content]").Attr("content"); ok {
 			r.Summary = v
 		}
 		if r.Summary == "" {
-			if v, ok := h.DOM.Clone().Find("meta[name=description][content]").Attr("content"); ok {
+			if v, ok := h.DOM.Find("meta[name=description][content]").Attr("content"); ok {
 				r.Summary = v
 			}
 		}

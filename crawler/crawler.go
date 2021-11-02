@@ -101,6 +101,7 @@ func (c *Crawler) Full(url string, r *Results) error {
 			vv.Find("[role=navigation]").Remove()
 			// scripts
 			vv.Find("script").Remove()
+			vv.Find("noscript").Remove()
 			// ads
 			vv.Find("ins").Remove()
 			vv.Find("[data-ad-client]").Remove()

@@ -16,6 +16,7 @@ type Results struct {
 	URL                  string
 	Title                string
 	Summary              string
+	MainContent          string
 	Author               string
 	Timestamp            uint64
 	Domain               string

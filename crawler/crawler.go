@@ -74,6 +74,28 @@ func (c *Crawler) Full(url string, r *Results) error {
 				r.Summary = v
 			}
 		}
+		// --- MAIN CONTENT ---
+		v := h.DOM.Find("main")
+		if len(v.Nodes) == 0 {
+			v = h.DOM.Find("[id^=content")
+		}
+		if len(v.Nodes) == 0 {
+			v = h.DOM.Find("[id^=main]")
+		}
+		if len(v.Nodes) > 0 {
+			vv := v.Clone()
+			// --- CLEAN ---
+			// navigation
+			vv.Find("nav").Remove()
+			vv.Find("[role=navigation]").Remove()
+			// scripts
+			vv.Find("script").Remove()
+			// ads
+			vv.Find("ins").Remove()
+			vv.Find("[data-ad-client]").Remove()
+
+			r.MainContent = vv.Text()
+		}
 	})
 
 	c.collector.Visit(url)

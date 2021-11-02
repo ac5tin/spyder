@@ -36,6 +36,8 @@ func (c *Crawler) Init() {
 
 	extensions.RandomUserAgent(c.collector)
 	extensions.Referer(c.collector)
+
+	c.collector.IgnoreRobotsTxt = true
 }
 
 func (c *Crawler) Raw(url string) (string, error) {

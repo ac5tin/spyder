@@ -116,6 +116,13 @@ func (c *Crawler) Full(url string, r *Results) error {
 
 			r.MainContent = vv.Text()
 		}
+
+		// --- AUTHOR ---
+		{
+			if v, ok := h.DOM.Find("meta[name=cse_author][content]").Attr("content"); ok {
+				r.Author = v
+			}
+		}
 	})
 
 	c.collector.Visit(url)

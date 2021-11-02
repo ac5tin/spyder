@@ -20,6 +20,7 @@ func TestFullScrape(t *testing.T) {
 		"https://www.reddit.com/",
 		"https://yahoo.com",
 		"https://youtube.com",
+		"https://www.scmp.com/news/hong-kong/health-environment/article/3154589/hong-kong-students-showing-signs-depression-new?module=lead_hero_story&pgtype=homepage",
 	}
 	for _, url := range urls {
 		log.Println("=================================================")

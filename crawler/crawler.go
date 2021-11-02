@@ -111,6 +111,8 @@ func (c *Crawler) Full(url string, r *Results) error {
 			// ads
 			vv.Find("ins").Remove()
 			vv.Find("[data-ad-client]").Remove()
+			vv.Find(".ads").Remove()
+			vv.Find(".advert").Remove()
 
 			r.MainContent = vv.Text()
 		}

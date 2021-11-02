@@ -60,61 +60,72 @@ func (c *Crawler) Full(url string, r *Results) error {
 	r.URL = url
 	c.collector.OnHTML("html", func(h *colly.HTMLElement) {
 		// --- RAW HTML ---
-		html, err := h.DOM.Html()
-		if err != nil {
-			log.Println(err.Error())
+		{
+			html, err := h.DOM.Html()
+			if err != nil {
+				log.Println(err.Error())
+			}
+			r.RawHTML = html
 		}
-		r.RawHTML = html
 		// --- TITLE ---
-		r.Title = h.DOM.Find("title").Text()
-		// --- Summary ---
-		if v, ok := h.DOM.Find("meta[itemprop=description][content]").Attr("content"); ok {
-			r.Summary = v
+		{
+
+			r.Title = h.DOM.Find("title").Text()
 		}
-		if r.Summary == "" {
-			if v, ok := h.DOM.Find("meta[name=description][content]").Attr("content"); ok {
+		// --- Summary ---
+		{
+
+			if v, ok := h.DOM.Find("meta[itemprop=description][content]").Attr("content"); ok {
 				r.Summary = v
 			}
-		}
+			if r.Summary == "" {
+				if v, ok := h.DOM.Find("meta[name=description][content]").Attr("content"); ok {
+					r.Summary = v
+				}
+			}
 
-		if r.Summary == "" {
-			if v, ok := h.DOM.Find("meta[name=cse_summary][content]").Attr("content"); ok {
-				r.Summary = v
+			if r.Summary == "" {
+				if v, ok := h.DOM.Find("meta[name=cse_summary][content]").Attr("content"); ok {
+					r.Summary = v
+				}
 			}
 		}
 		// --- MAIN CONTENT ---
-		v := h.DOM.Find("main")
-		if len(v.Nodes) == 0 {
-			v = h.DOM.Find("[id^=content")
-		}
-		if len(v.Nodes) == 0 {
-			v = h.DOM.Find("[id^=main]")
-		}
-		// final fallback
-		if len(v.Nodes) == 0 {
-			v = h.DOM.Find("body")
-			v.Find("header").Remove()
-			v.Find("footer ~ *").Remove()
-			v.Find("footer").Remove()
-		}
-		if len(v.Nodes) > 0 {
-			vv := v.Clone()
-			// --- CLEAN ---
-			// styling
-			vv.Find("style").Remove()
-			// navigation
-			vv.Find("nav").Remove()
-			vv.Find("[role=navigation]").Remove()
-			// scripts
-			vv.Find("script").Remove()
-			vv.Find("noscript").Remove()
-			// ads
-			vv.Find("ins").Remove()
-			vv.Find("[data-ad-client]").Remove()
-			vv.Find(".ads").Remove()
-			vv.Find(".advert").Remove()
+		{
+			v := h.DOM.Find("main")
+			if len(v.Nodes) == 0 {
+				v = h.DOM.Find("[id^=content")
+			}
+			if len(v.Nodes) == 0 {
+				v = h.DOM.Find("[id^=main]")
+			}
+			// final fallback
+			if len(v.Nodes) == 0 {
+				v = h.DOM.Find("body")
+				v.Find("header").Remove()
+				v.Find("footer ~ *").Remove()
+				v.Find("footer").Remove()
+			}
+			if len(v.Nodes) > 0 {
+				vv := v.Clone()
+				// --- CLEAN ---
+				// styling
+				vv.Find("style").Remove()
+				// navigation
+				vv.Find("nav").Remove()
+				vv.Find("[role=navigation]").Remove()
+				// scripts
+				vv.Find("script").Remove()
+				vv.Find("noscript").Remove()
+				// ads
+				vv.Find("ins").Remove()
+				vv.Find("[data-ad-client]").Remove()
+				vv.Find(".ads").Remove()
+				vv.Find(".advert").Remove()
 
-			r.MainContent = vv.Text()
+				r.MainContent = vv.Text()
+			}
+
 		}
 
 		// --- AUTHOR ---

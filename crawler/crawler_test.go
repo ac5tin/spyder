@@ -13,6 +13,7 @@ func TestFullScrape(t *testing.T) {
 		"https://stackoverflow.com/questions/68230031/cannot-create-a-string-longer-than-0x1fffffe8-characters-in-json-parse",
 		"https://www.epochconverter.com/",
 		"https://github.com/trending",
+		"https://m3o.com/db",
 	}
 	for _, url := range urls {
 		log.Println("=================================================")

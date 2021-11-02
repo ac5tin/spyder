@@ -32,7 +32,16 @@ func TestFullScrape(t *testing.T) {
 		}
 		// --- SUMMARY ---
 		log.Printf("Summary: %s", r.Summary)
-		if r.Title == "" {
+		if r.Summary == "" {
+			t.Errorf("Failed to scrape summary")
+		}
+
+		// --- MAIN CONTENT ---
+		if len(r.MainContent) > 500 {
+			r.MainContent = r.MainContent[:500]
+		}
+		log.Printf("Main content: %s", r.MainContent)
+		if r.MainContent == "" {
 			t.Errorf("Failed to scrape summary")
 		}
 		log.Println("=================================================")

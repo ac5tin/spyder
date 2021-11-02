@@ -65,7 +65,14 @@ func (c *Crawler) Full(url string, r *Results) error {
 		// --- TITLE ---
 		r.Title = h.DOM.Clone().Find("title").Text()
 		// --- Summary ---
-		h.DOM.Clone().Find("meta[itemprop=description][content]").Attr("content")
+		if v, ok := h.DOM.Clone().Find("meta[itemprop=description][content]").Attr("content"); ok {
+			r.Summary = v
+		}
+		if r.Summary == "" {
+			if v, ok := h.DOM.Clone().Find("meta[name=description][content]").Attr("content"); ok {
+				r.Summary = v
+			}
+		}
 	})
 
 	c.collector.Visit(url)

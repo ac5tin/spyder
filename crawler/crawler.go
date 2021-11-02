@@ -2,6 +2,7 @@ package crawler
 
 import (
 	"log"
+	"time"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/extensions"
@@ -132,6 +133,17 @@ func (c *Crawler) Full(url string, r *Results) error {
 		{
 			if v, ok := h.DOM.Find("meta[name=cse_author][content]").Attr("content"); ok {
 				r.Author = v
+			}
+		}
+		// --- TIMESTAMP ---
+		{
+			if v, ok := h.DOM.Find("meta[property=og:updated_time][content]").Attr("content"); ok {
+				t, err := time.Parse("2006-01-02T15:04:05+-07:00", v)
+				if err != nil {
+					t = time.Now()
+				}
+				r.Timestamp = uint64(t.Unix())
+
 			}
 		}
 	})

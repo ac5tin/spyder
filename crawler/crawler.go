@@ -72,3 +72,5 @@ func (c *Crawler) Full(url string, r *Results) error {
 	c.Collector.Wait()
 	return nil
 }
+
+var C *Crawler

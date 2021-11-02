@@ -8,7 +8,7 @@ import (
 )
 
 type Crawler struct {
-	Collector *colly.Collector
+	collector *colly.Collector
 }
 
 type Results struct {
@@ -28,18 +28,18 @@ type Results struct {
 }
 
 func (c *Crawler) Init() {
-	c.Collector = colly.NewCollector(colly.Async(), colly.AllowURLRevisit())
-	c.Collector.Limit(&colly.LimitRule{
+	c.collector = colly.NewCollector(colly.Async(), colly.AllowURLRevisit())
+	c.collector.Limit(&colly.LimitRule{
 		Parallelism: 100,
 	})
 
-	extensions.RandomUserAgent(c.Collector)
-	extensions.Referer(c.Collector)
+	extensions.RandomUserAgent(c.collector)
+	extensions.Referer(c.collector)
 }
 
 func (c *Crawler) Raw(url string) (string, error) {
 	raw := ""
-	c.Collector.OnHTML("html", func(h *colly.HTMLElement) {
+	c.collector.OnHTML("html", func(h *colly.HTMLElement) {
 		html, err := h.DOM.Html()
 		if err != nil {
 			log.Println(err.Error())
@@ -47,15 +47,15 @@ func (c *Crawler) Raw(url string) (string, error) {
 		raw = html
 	})
 
-	c.Collector.Visit(url)
-	c.Collector.Wait()
+	c.collector.Visit(url)
+	c.collector.Wait()
 	return raw, nil
 }
 
 func (c *Crawler) Full(url string, r *Results) error {
 	// --- URL ---
 	r.URL = url
-	c.Collector.OnHTML("html", func(h *colly.HTMLElement) {
+	c.collector.OnHTML("html", func(h *colly.HTMLElement) {
 		// --- RAW HTML ---
 		html, err := h.DOM.Html()
 		if err != nil {
@@ -68,8 +68,8 @@ func (c *Crawler) Full(url string, r *Results) error {
 		h.DOM.Clone().Find("meta[itemprop=description][content]").Attr("content")
 	})
 
-	c.Collector.Visit(url)
-	c.Collector.Wait()
+	c.collector.Visit(url)
+	c.collector.Wait()
 	return nil
 }
 

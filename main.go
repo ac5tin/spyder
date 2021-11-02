@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"spyder/api"
 	"spyder/crawler"
 
 	"github.com/gofiber/fiber/v2"
@@ -32,6 +33,9 @@ func main() {
 
 	// ==== API Routes ====
 	app.Get("/ping", func(c *fiber.Ctx) error { c.Status(200).Send([]byte("pong")); return nil })
+
+	apiGroup := app.Group("/api")
+	api.Routes(&apiGroup)
 
 	log.Println(fmt.Sprintf("Listening on PORT %d", *port))
 	if err := app.Listen(fmt.Sprintf(":%d", *port)); err != nil {

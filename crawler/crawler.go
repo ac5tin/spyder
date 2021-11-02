@@ -82,6 +82,13 @@ func (c *Crawler) Full(url string, r *Results) error {
 		if len(v.Nodes) == 0 {
 			v = h.DOM.Find("[id^=main]")
 		}
+		// final fallback
+		if len(v.Nodes) == 0 {
+			v = h.DOM.Find("body")
+			v.Find("header").Remove()
+			v.Find("footer ~ *").Remove()
+			v.Find("footer").Remove()
+		}
 		if len(v.Nodes) > 0 {
 			vv := v.Clone()
 			// --- CLEAN ---

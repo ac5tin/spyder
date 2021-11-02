@@ -14,6 +14,9 @@ func TestFullScrape(t *testing.T) {
 		"https://www.epochconverter.com/",
 		"https://github.com/trending",
 		"https://m3o.com/db",
+		"https://news.ycombinator.com/",
+		"https://google.co.uk",
+		"https://facebook.com",
 	}
 	for _, url := range urls {
 		log.Println("=================================================")

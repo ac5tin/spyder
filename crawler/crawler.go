@@ -76,6 +76,12 @@ func (c *Crawler) Full(url string, r *Results) error {
 				r.Summary = v
 			}
 		}
+
+		if r.Summary == "" {
+			if v, ok := h.DOM.Find("meta[name=cse_summary][content]").Attr("content"); ok {
+				r.Summary = v
+			}
+		}
 		// --- MAIN CONTENT ---
 		v := h.DOM.Find("main")
 		if len(v.Nodes) == 0 {

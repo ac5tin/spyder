@@ -18,6 +18,8 @@ func TestFullScrape(t *testing.T) {
 		"https://google.co.uk",
 		"https://facebook.com",
 		"https://www.reddit.com/",
+		"https://yahoo.com",
+		"https://youtube.com",
 	}
 	for _, url := range urls {
 		log.Println("=================================================")

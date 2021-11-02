@@ -92,6 +92,8 @@ func (c *Crawler) Full(url string, r *Results) error {
 		if len(v.Nodes) > 0 {
 			vv := v.Clone()
 			// --- CLEAN ---
+			// styling
+			vv.Find("style").Remove()
 			// navigation
 			vv.Find("nav").Remove()
 			vv.Find("[role=navigation]").Remove()

@@ -2,6 +2,7 @@ package crawler
 
 import (
 	"log"
+	URL "net/url"
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -20,7 +21,7 @@ type Results struct {
 	MainContent          string
 	Author               string
 	Timestamp            uint64
-	Domain               string
+	Site                 string
 	Country              string
 	Lang                 string
 	Type                 string
@@ -137,13 +138,19 @@ func (c *Crawler) Full(url string, r *Results) error {
 		}
 		// --- TIMESTAMP ---
 		{
-			if v, ok := h.DOM.Find("meta[property=og:updated_time][content]").Attr("content"); ok {
+			if v, ok := h.DOM.Find("meta[property$=updated_time][content]").Attr("content"); ok {
 				t, err := time.Parse("2006-01-02T15:04:05+-07:00", v)
-				if err != nil {
-					t = time.Now()
+				if err == nil {
+					r.Timestamp = uint64(t.Unix())
 				}
-				r.Timestamp = uint64(t.Unix())
 
+			}
+		}
+		// --- SITE ---
+		{
+			u, err := URL.Parse(url)
+			if err == nil {
+				r.Site = u.Host
 			}
 		}
 	})

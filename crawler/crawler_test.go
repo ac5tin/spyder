@@ -22,6 +22,7 @@ func TestFullScrape(t *testing.T) {
 		"https://yahoo.com",
 		"https://youtube.com",
 		"https://www.scmp.com/news/hong-kong/health-environment/article/3154589/hong-kong-students-showing-signs-depression-new?module=lead_hero_story&pgtype=homepage",
+		"https://ai.facebook.com/blog/reskin-a-versatile-replaceable-low-cost-skin-for-ai-research-on-tactile-perception/",
 	}
 	for _, url := range urls {
 		log.Println("=================================================")
@@ -65,6 +66,29 @@ func TestFullScrape(t *testing.T) {
 		log.Printf("Site : %s", r.Site)
 		if r.Site == "" {
 			t.Errorf("Failed to scrape site")
+		}
+
+		// --- COUNTRY ---
+		log.Printf("Country : %s", r.Country)
+		if r.Country == "" {
+			t.Errorf("Failed to scrape country")
+		}
+
+		// --- LANGUAGE ---
+		log.Printf("Language : %s", r.Lang)
+		if r.Lang == "" {
+			t.Errorf("Failed to scrape language")
+		}
+
+		// --- Links ---
+		log.Printf("Internal Links : %v", r.RelatedInternalLinks)
+		log.Printf("External Links : %v", r.RelatedExternalLinks)
+		if len(r.RelatedExternalLinks) == 0 {
+			t.Errorf("Failed to scrape related external links")
+		}
+
+		if len(r.RelatedInternalLinks) == 0 {
+			t.Errorf("Failed to scrape related internal links")
 		}
 		log.Println("=================================================")
 	}

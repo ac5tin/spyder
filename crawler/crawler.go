@@ -3,10 +3,13 @@ package crawler
 import (
 	"log"
 	URL "net/url"
+	"strings"
 	"time"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/extensions"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 type Crawler struct {
@@ -152,6 +155,37 @@ func (c *Crawler) Full(url string, r *Results) error {
 			if err == nil {
 				r.Site = u.Host
 			}
+		}
+		// --- LANGUAGE ---
+		{
+			if v := h.Attr("lang"); v != "" {
+
+				if strings.Contains(v, "en") {
+					r.Lang = "en"
+					return
+				}
+				if strings.Contains(v, "zh") {
+					r.Lang = "zh"
+					return
+				}
+			}
+		}
+		// Links
+		{
+			links := h.DOM.Find("a[href]")
+			links.Each(func(_ int, s *goquery.Selection) {
+				if href, ok := s.Attr("href"); ok {
+					if u, err := URL.Parse(href); err == nil {
+						if u.Host == r.Site || u.Host == "" {
+							// internal
+							r.RelatedInternalLinks = append(r.RelatedInternalLinks, href)
+						} else {
+							// external
+							r.RelatedExternalLinks = append(r.RelatedExternalLinks, href)
+						}
+					}
+				}
+			})
 		}
 	})
 

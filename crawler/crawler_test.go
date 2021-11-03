@@ -23,6 +23,7 @@ func TestFullScrape(t *testing.T) {
 		"https://youtube.com",
 		"https://www.scmp.com/news/hong-kong/health-environment/article/3154589/hong-kong-students-showing-signs-depression-new?module=lead_hero_story&pgtype=homepage",
 		"https://ai.facebook.com/blog/reskin-a-versatile-replaceable-low-cost-skin-for-ai-research-on-tactile-perception/",
+		"https://www.reddit.com/r/golang/comments/opd6nk/puppeteer_equivalent_in_go/",
 	}
 	for _, url := range urls {
 		log.Println("=================================================")
